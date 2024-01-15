@@ -243,7 +243,31 @@
       <img src="feedback.png" alt="Изображение">
     </div>
   </div>
-    
+ <script>
+    const form = document.getElementById('feedback-form');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const url = 'URL-адрес-триггера-Zapier';
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          alert('Данные успешно отправлены');
+        } else {
+          alert('Ошибка при отправке данных');
+        }
+      } catch (error) {
+        console.error('Произошла ошибка:', error);
+      }
+    });
+  </script>    
 <script src="script.js"></script> 
 <script src="animation_prior.js"></script>    
 <script src="section.js"></script>  
