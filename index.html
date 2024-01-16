@@ -167,27 +167,27 @@
       
       <div class="service-image-container" id="road-container" style="display: none;">
         <img src="road.png" id="road" class="service-image" alt="Автоперевозки">
-        <img src="roadshadow.png" id="roadshadow" class="service-shadow" alt="Тень грузовика">
+      <!--  <img src="roadshadow.png" id="roadshadow" class="service-shadow" alt="Тень грузовика">-->
       </div>
       
       <div class="service-image-container" id="multi-container" style="display: none;">
         <img src="multi.png" id="multi" class="service-image" alt="Мульти модальные перевозки">
-        <img src="multishadow.png" id="multishadow" class="service-shadow" alt="Тень мультигруза">
+      <!--  <img src="multishadow.png" id="multishadow" class="service-shadow" alt="Тень мультигруза">-->
       </div>
       
       <div class="service-image-container" id="storage-container" style="display: none;">
         <img src="storage.png" id="storage" class="service-image" alt="Услуги по складированию">
-        <img src="storageshadow.png" id="storageshadow" class="service-shadow" alt="Тень склада">
-      </div>
+      <!--  <img src="storageshadow.png" id="storageshadow" class="service-shadow" alt="Тень склада">-->
+      </div> 
       
       <div class="service-image-container" id="transit-container" style="display: none;">
         <img src="transit.png" id="transit" class="service-image" alt="Услуги транзитного перенаправления">
-        <img src="transitshadow.png" id="transitshadow" class="service-shadow" alt="Тень транзита">
+       <!-- <img src="transitshadow.png" id="transitshadow" class="service-shadow" alt="Тень транзита"> -->
       </div>
       
       <div class="service-image-container" id="consult-container" style="display: none;">
         <img src="consult.png" id="consult" class="service-image" alt="Консалтинговая услуга">
-        <img src="consultshadow.png" id="consultshadow" class="service-shadow" alt="Тень консалтинга">
+        <!-- img src="consultshadow.png" id="consultshadow" class="service-shadow" alt="Тень консалтинга" -->
       </div>
       <!-- Добавьте аналогичные блоки для других услуг -->
     </div>
@@ -220,8 +220,18 @@
       <button>Выбрать</button>
     </div>
   </div>
+  <div id="trackingResult"></div> <!-- Элемент для отображения результатов -->
 
-    <div class="feedback-form">
+
+  <div class="tracking-container">
+    <h1>Отследить груз</h1>
+    <input type="text" id="trackingCode" placeholder="Введите номер вашего груза">
+    <button type="submit" id="trackButton">Отследить груз</button>
+    <div id="trackingResults"></div>
+</div>
+  
+
+  <div class="feedback-form">
     <div class="feedback-content">
       <h1>Оставьте<br>заявку</h1>
       <h4>Наши специалисты свяжутся<br>с вами в ближайшее время!</h4>
@@ -229,17 +239,17 @@
         <!-- Ваши поля формы здесь -->
         <div class="form-group">
           <label for="name">Имя:</label>
-          <input type="text" id="name" name="name" required>
+          <input type="text" id="name" required>
         </div>
   
         <div class="form-group">
           <label for="email">Email:</label>
-         <input type="email" id="email" name="email" required>
+          <input type="email" id="email" required>
         </div>
   
         <div class="form-group">
           <label for="message">Сообщение:</label>
-          <textarea id="message" name="message" rows="4" required></textarea>
+          <textarea id="message" rows="4" required></textarea>
         </div>
   
         <button type="submit">Отправить</button>
@@ -250,11 +260,8 @@
       <img src="feedback.png" alt="Изображение">
     </div>
   </div>
-        
+  
 <script src="script.js"></script> 
-<script src="animation_prior.js"></script>    
-<script src="section.js"></script>  
-        <script src="script.js"></script> 
 <script src="animation_prior.js"></script>    
 <script src="section.js"></script>  
 <script>
@@ -282,5 +289,33 @@
       }
     });
   </script>
+<script>
+document.getElementById('trackButton').addEventListener('click', function() {
+    var trackingCode = document.getElementById('trackingCode').value;
+    fetch(`/track?code=${trackingCode}`)
+        .then(response => response.json())
+        .then(data => {
+            var resultsDiv = document.getElementById('trackingResults');
+            if (data.success) {
+                // Создаем и добавляем контент в resultsDiv
+                var content = '<h3>Информация о грузе:</h3>';
+                content += '<ul>';
+                data.data.forEach(item => {
+                    content += `<li>${item}</li>`; // Предполагается, что каждый элемент массива - это строка данных
+                });
+                content += '</ul>';
+                resultsDiv.innerHTML = content;
+            } else {
+                // Если груз не найден, выводим сообщение
+                resultsDiv.innerHTML = '<p>Груз не найден.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            resultsDiv.innerHTML = '<p>Произошла ошибка при запросе данных.</p>';
+        });
+});
+    </script>
+<script src=getSheetData.js></script>    
 </body>
 </html>
